@@ -11,6 +11,7 @@ import Dashboard from "./layouts/Dashboard.jsx";
 import Appointments from "./layouts/Appointments.jsx";
 import Profile from "./layouts/Profile.jsx";
 import { Toaster } from "react-hot-toast";
+import BookAppointment from "./layouts/BookAppointment.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,16 @@ const router = createBrowserRouter([
       <NavbarLayout>
         <Dashboard>
           <Appointments />
+        </Dashboard>
+      </NavbarLayout>
+    ),
+  },
+  {
+    path: "/appointments/create",
+    element: (
+      <NavbarLayout>
+        <Dashboard>
+          <BookAppointment />
         </Dashboard>
       </NavbarLayout>
     ),

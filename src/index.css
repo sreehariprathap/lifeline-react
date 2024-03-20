@@ -3,15 +3,19 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .button-primary {
   display: flex;
   border-radius: 100px;
   padding: 10px 20px;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to right, #3A8EF6, #6F3AFA);
+  background: linear-gradient(to right, #3a8ef6, #6f3afa);
   color: white;
   font-weight: 600; /* semibold */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* clean drop shadow */
+}
+
+.ant-btn css-dev-only-do-not-override-1ae8k9u ant-btn-primary ant-btn-sm {
+  border: 1px solid #3a8ff6a6;
+  color: #0B132B;
 }
