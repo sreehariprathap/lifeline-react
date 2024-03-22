@@ -12,6 +12,9 @@ import Appointments from "./layouts/Appointments.jsx";
 import Profile from "./layouts/Profile.jsx";
 import { Toaster } from "react-hot-toast";
 import BookAppointment from "./layouts/BookAppointment.jsx";
+import DoctorList from "./layouts/DoctorList.jsx";
+import AddDoctor from "./layouts/AddDoctor.jsx";
+import MedicalHistory from "./layouts/MedicalHistory.jsx";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +53,36 @@ const router = createBrowserRouter([
       <NavbarLayout>
         <Dashboard>
           <BookAppointment />
+        </Dashboard>
+      </NavbarLayout>
+    ),
+  },
+  {
+    path: "/doctors",
+    element: (
+      <NavbarLayout>
+        <Dashboard>
+          <DoctorList />
+        </Dashboard>
+      </NavbarLayout>
+    ),
+  },
+  {
+    path: "/doctors/add",
+    element: (
+      <NavbarLayout>
+        <Dashboard>
+          <AddDoctor />
+        </Dashboard>
+      </NavbarLayout>
+    ),
+  },
+  {
+    path: "/medical-history",
+    element: (
+      <NavbarLayout>
+        <Dashboard>
+          <MedicalHistory />
         </Dashboard>
       </NavbarLayout>
     ),

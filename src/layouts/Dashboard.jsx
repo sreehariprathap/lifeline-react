@@ -6,7 +6,7 @@ const Dashboard = ({ children }) => {
       <div className=" h-[80vh] flex items-center pl-5">
         <Sidebar />
       </div>
-      {children}
+      <div className="p-10 flex flex-col gap-3 w-full">{children}</div>
     </div>
   );
 };

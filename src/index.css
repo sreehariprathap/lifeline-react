@@ -17,5 +17,9 @@
 
 .ant-btn css-dev-only-do-not-override-1ae8k9u ant-btn-primary ant-btn-sm {
   border: 1px solid #3a8ff6a6;
-  color: #0B132B;
+  color: #0b132b;
+}
+
+.app-header {
+  @apply text-3xl font-semibold;
 }

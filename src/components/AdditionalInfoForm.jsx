@@ -15,16 +15,18 @@ const AdditionalInfoForm = ({ createAppointment }) => {
   return (
     <div>
       <h2>Additional Information</h2>
-      <div>
-        <label htmlFor="additionalInfo">
-          Add any additional information you want to enter:
-        </label>
+      <div className="flx flex-col gap-2 w-full">
+        <div className="label">
+          <span className="label-text">
+            Please enter any additional information
+          </span>
+        </div>
         <textarea
           id="additionalInfo"
           value={additionalInfo}
           onChange={handleInputChange}
-          rows={4}
           cols={50}
+          className="input input-bordered"
         />
       </div>
       <button className="btn btn-primary" onClick={handleSubmit}>
