@@ -3,7 +3,7 @@ import AppButton from "./AppButton";
 import { FiLogIn, FiLock } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-const Navbar = () => {
+const Navbar = ({ isLanding = false }) => {
   const { user, logOut } = UserAuth();
   const navigate = useNavigate();
 
@@ -17,20 +17,22 @@ const Navbar = () => {
       toast.error("Failed to log out"); // Display an error message to the user
     }
   };
-  
+
   return (
     <div>
       <div className="navbar bg-primary-white fixed top-0 z-50 flex justify-between gap-4 items-center px-5">
         <div className="">
           <img src="/src/assets/logo-blue.png" alt="logo" className="w-48" />
         </div>
-        <div>
-          <ul className="flex gap-5 text-slate-900">
-            <li>Home</li>
-            <li>About Us</li>
-            <li>How It Works</li>
-          </ul>
-        </div>
+        {isLanding && (
+          <div>
+            <ul className="flex gap-5 text-slate-900">
+              <li>Home</li>
+              <li>About Us</li>
+              <li>How It Works</li>
+            </ul>
+          </div>
+        )}
 
         {!user && (
           <div className="flex gap-5">

@@ -23,3 +23,7 @@
 .app-header {
   @apply text-3xl font-semibold;
 }
+
+* {
+  @apply scrollbar-hide;
+}

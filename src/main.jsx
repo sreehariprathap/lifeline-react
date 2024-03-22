@@ -103,7 +103,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthContextProvider>
       <RouterProvider router={router} />
-      <Toaster />
+      <Toaster /> 
     </AuthContextProvider>
   </React.StrictMode>
 );
