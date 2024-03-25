@@ -6,19 +6,33 @@ import toast from "react-hot-toast";
 const LoginForm = () => {
   const { googleSignIn, loginWithEmailAndPassword } = UserAuth();
   const navigate = useNavigate();
-  const onCredentialLogin = (values) => {
+  const onCredentialLogin = async (values) => {
     const [email, password] = values;
-    loginWithEmailAndPassword(email, password).then(() => {
+    try {
+      await loginWithEmailAndPassword(email, password);
       navigate("/appointments");
       toast.success("Login successful!");
-    });
+    } catch (error) {
+      // Handle any errors that might occur during login
+      console.error("Error logging in:", error);
+      // Optionally, you can also display an error message to the user
+      toast.error("Failed to login. Please try again later.");
+      navigate("/login");
+    }
   };
 
-  const handleGoogleSignIn = () => {
-    googleSignIn().then(() => {
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn();
       navigate("/appointments");
       toast.success("Google login successful!");
-    });
+    } catch (error) {
+      // Handle any errors that might occur during Google sign-in
+      console.error("Error with Google sign-in:", error);
+      // Optionally, you can also display an error message to the user
+      toast.error("Failed to sign in with Google. Please try again later.");
+      navigate("/login");
+    }
   };
 
   return (

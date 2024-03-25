@@ -1,9 +1,10 @@
 import { UserAuth } from "../contexts/AuthContext";
 import AppButton from "./AppButton";
-import { FiLogIn, FiLock } from "react-icons/fi";
+import { FiLogIn, FiLock, FiMessageCircle } from "react-icons/fi";
+import { LuStethoscope } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-const Navbar = ({ isLanding = false }) => {
+const Navbar = ({ isLanding = false, isDoctor = false }) => {
   const { user, logOut } = UserAuth();
   const navigate = useNavigate();
 
@@ -34,18 +35,36 @@ const Navbar = ({ isLanding = false }) => {
           </div>
         )}
 
-        {!user && (
-          <div className="flex gap-5">
-            <AppButton link={"/login"} textContent={"login"} icon={FiLogIn} />
+        {isLanding && (
+          <div className="flex gap-3">
             <AppButton
-              link={"/register"}
+              link={!user ? "/login" : "/appointments"}
+              textContent={"Book an appointment"}
+              icon={<FiMessageCircle />}
+            />
+            <AppButton
+              link={!user ? "/doctor/login" : "/doctor/appointments"}
+              textContent={"Doctor"}
+              icon={<LuStethoscope />}
+            />
+          </div>
+        )}
+        {!user && !isLanding && (
+          <div className="flex gap-5">
+            <AppButton
+              link={isDoctor ? "/doctor/login" : "/login"}
+              textContent={"login"}
+              icon={FiLogIn}
+            />
+            <AppButton
+              link={isDoctor ? "/doctor/register" : "/register"}
               textContent={"register"}
-              icon={FiLock}
+              icon={<FiLock />}
             />
           </div>
         )}
 
-        {user && (
+        {user && !isLanding && (
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
