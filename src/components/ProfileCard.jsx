@@ -4,7 +4,7 @@ import { UserAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 import { useState } from "react";
 
-const ProfileCard = ({ doctor, isAdded = true }) => {
+const ProfileCard = ({ doctor, isListing = false }) => {
   const { user } = UserAuth();
   const [isRequested, setIsRequested] = useState(false);
 
@@ -65,14 +65,17 @@ const ProfileCard = ({ doctor, isAdded = true }) => {
         <p>
           <strong>Registration Number:</strong> {doctor.registrationNumber}
         </p>
-        <div className="card-actions justify-end">
-          {isAdded && <button className="btn btn-primary">Request sent</button>}
-          {!isAdded && (
-            <button className="btn btn-primary" onClick={handleRequest}>
-              {isRequested ? "Requested" : "Send Request"}
+        {!isListing && (
+          <div className="card-actions justify-end">
+            <button
+              className="btn btn-primary"
+              onClick={handleRequest}
+              disabled={isRequested}
+            >
+              {isRequested ? "Request sent" : "Send Request"}
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
