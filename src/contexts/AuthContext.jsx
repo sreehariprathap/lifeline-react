@@ -72,6 +72,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const addDoctorToDatabase = async (doctorData) => {
     const {
+      userId,
       firstName,
       lastName,
       email,
@@ -85,6 +86,7 @@ export const AuthContextProvider = ({ children }) => {
     try {
       // Add the doctor data to the 'doctors' collection
       await addDoc(collection(db, "doctors"), {
+        userId: userId,
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -140,6 +142,8 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -156,6 +160,7 @@ export const AuthContextProvider = ({ children }) => {
         loginWithEmailAndPassword,
         RegisterWithEmailAndPassword,
         addUserToDatabase,
+        db,
       }}
     >
       {children}

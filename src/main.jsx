@@ -19,6 +19,7 @@ import DoctorsRegister from "./layouts/DoctorsRegister.jsx";
 import DoctorsLogin from "./layouts/DoctorsLogin.jsx";
 import DoctorsDashboard from "./layouts/DoctorsDashboard.jsx";
 import DoctorsAppointments from "./layouts/DoctorsAppointments.jsx";
+import PatientRequests from "./layouts/PatientRequests.jsx";
 
 const router = createBrowserRouter([
   {
@@ -128,6 +129,16 @@ const router = createBrowserRouter([
       <NavbarLayout isDoctor={true}>
         <DoctorsDashboard>
           <DoctorsAppointments />
+        </DoctorsDashboard>
+      </NavbarLayout>
+    ),
+  },
+  {
+    path: "/doctor/requests",
+    element: (
+      <NavbarLayout isDoctor={true}>
+        <DoctorsDashboard>
+          <PatientRequests />
         </DoctorsDashboard>
       </NavbarLayout>
     ),
