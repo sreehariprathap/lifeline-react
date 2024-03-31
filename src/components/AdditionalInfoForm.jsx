@@ -4,10 +4,13 @@ const AdditionalInfoForm = ({ createAppointment }) => {
   const [additionalInfo, setAdditionalInfo] = useState("");
 
   const handleInputChange = (e) => {
-    setAdditionalInfo(e.target.value);
+    // Extract the value from the textarea
+    const inputValue = e.target.value;
+    setAdditionalInfo(inputValue);
   };
 
   const handleSubmit = () => {
+    console.log("additional info", additionalInfo);
     // Call the callback function from the parent component and pass the additional info
     createAppointment(additionalInfo);
   };

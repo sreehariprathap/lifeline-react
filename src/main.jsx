@@ -15,11 +15,20 @@ import BookAppointment from "./layouts/BookAppointment.jsx";
 import DoctorList from "./layouts/DoctorList.jsx";
 import AddDoctor from "./layouts/AddDoctor.jsx";
 import MedicalHistory from "./layouts/MedicalHistory.jsx";
+import DoctorsRegister from "./layouts/DoctorsRegister.jsx";
+import DoctorsLogin from "./layouts/DoctorsLogin.jsx";
+import DoctorsDashboard from "./layouts/DoctorsDashboard.jsx";
+import DoctorsAppointments from "./layouts/DoctorsAppointments.jsx";
+import PatientRequests from "./layouts/PatientRequests.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <NavbarLayout isLanding={true}>
+        <App />,
+      </NavbarLayout>
+    ),
   },
   {
     path: "/login",
@@ -97,13 +106,50 @@ const router = createBrowserRouter([
       </NavbarLayout>
     ),
   },
+  {
+    path: "/doctor/register",
+    element: (
+      <NavbarLayout isDoctor={true}>
+        <DoctorsRegister />
+      </NavbarLayout>
+    ),
+  },
+  {
+    path: "/doctor/login",
+    element: (
+      <NavbarLayout isDoctor={true}>
+        <DoctorsLogin />
+      </NavbarLayout>
+    ),
+  },
+
+  {
+    path: "/doctor/appointments",
+    element: (
+      <NavbarLayout isDoctor={true}>
+        <DoctorsDashboard>
+          <DoctorsAppointments />
+        </DoctorsDashboard>
+      </NavbarLayout>
+    ),
+  },
+  {
+    path: "/doctor/requests",
+    element: (
+      <NavbarLayout isDoctor={true}>
+        <DoctorsDashboard>
+          <PatientRequests />
+        </DoctorsDashboard>
+      </NavbarLayout>
+    ),
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthContextProvider>
       <RouterProvider router={router} />
-      <Toaster /> 
+      <Toaster />
     </AuthContextProvider>
   </React.StrictMode>
 );

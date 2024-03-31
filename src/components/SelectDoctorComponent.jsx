@@ -1,7 +1,5 @@
-import AppIcon from "../components/AppIcon";
-import { FiPlusCircle } from "react-icons/fi";
-import ProfileCard from "../components/ProfileCard";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { UserAuth } from "../contexts/AuthContext";
 import {
   collection,
   getDocs,
@@ -10,16 +8,13 @@ import {
   doc as document,
   getDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { UserAuth } from "../contexts/AuthContext";
 
-
-const DoctorList = () => {
+const SelectDoctorComponent = ({
+  setDoctorNameAndId,
+  proceed,
+  userId = "BcpxRzODsEbdkjo1vrcrftwu3L23",
+}) => {
   const { db } = UserAuth();
-  const userData = JSON.parse(localStorage.getItem("user"));
-  console.log(userData.user.uid);
-  const userId = userData.user.uid;
-
   const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
@@ -36,7 +31,6 @@ const DoctorList = () => {
         const doctorIds = new Set();
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          console.log(data);
           doctorIds.add(data.doctorId);
         });
 
@@ -47,36 +41,49 @@ const DoctorList = () => {
           })
         );
 
-        console.log(doctorData);
         setDoctors(doctorData);
+        setDoctorNameAndId(
+          doctorData[0].firstName + " " + doctorData[0].lastName,
+          doctorData[0].id
+        );
       } catch (error) {
         console.error("Error fetching accepted doctors:", error);
-        // setError("Failed to fetch accepted doctors. Please try again later.");
-        // setLoading(false);
       }
     };
 
     fetchAcceptedDoctors();
   }, [userId]);
+
+  const handleSelectDoctor = (e) => {
+    const selectedDoctor = doctors.find(
+      (doctor) => doctor.id === e.target.value
+    );
+    setDoctorNameAndId(
+      selectedDoctor.firstName + " " + selectedDoctor.lastName,
+      selectedDoctor.id
+    ); // Pass both name and ID
+  };
+
   return (
     <div className="flex flex-col gap-3">
-      <div className="w-full flex justify-between items-center">
-        <h1 className="app-header ">My Doctors</h1>
-        <Link to={"/doctors/add"}>
-          <AppIcon styles={""}>
-            {
-              <FiPlusCircle className="w-8 h-8 hover:text-primary-color transition linear" />
-            }
-          </AppIcon>
-        </Link>
-      </div>
-      <div className=" flex flex-wrap gap-2">
-        {doctors.map((doctor, index) => (
-          <ProfileCard key={index} doctor={doctor} isListing={true} />
+      <h1>Select doctor to book an appointment</h1>
+      <select
+        placeholder="Select option"
+        className="select input input-bordered"
+        onChange={handleSelectDoctor}
+        onSelect={handleSelectDoctor}
+      >
+        {doctors.map((doctor) => (
+          <option key={doctor.id} value={doctor.id}>
+            {doctor.firstName} {doctor.lastName} - {doctor.specialization}
+          </option>
         ))}
-      </div>
+      </select>
+      <button className="btn btn-primary" onClick={proceed}>
+        Proceed
+      </button>
     </div>
   );
 };
 
-export default DoctorList;
+export default SelectDoctorComponent;

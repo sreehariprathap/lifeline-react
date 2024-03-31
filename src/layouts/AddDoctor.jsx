@@ -2,26 +2,38 @@ import { Formik } from "formik";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import ProfileCard from "../components/ProfileCard";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase";
 
 const AddDoctorForm = () => {
   const [doctor, setDoctor] = useState(null);
 
-  const searchDoctor = (healthcardNumber) => {
-    // Simulated function to search for a doctor based on health card number
-    // Replace this with your actual logic to search for a doctor
-    // For demonstration, I'm just setting a dummy doctor object if the health card number matches
-    if (healthcardNumber === "1234567890") {
-      const dummyDoctor = {
-        name: "Dr. John Doe",
-        location: "123 Main Street, Cityville, Canada",
-        healthcardNumber: "1234567890",
-        specialization: "Cardiology",
-        imageUrl: "https://example.com/doctor-avatar.jpg",
-      };
-      setDoctor(dummyDoctor);
-    } else {
-      setDoctor(null);
-      toast.error("No doctor found with the provided health card number");
+  const fetchDoctorByRegistrationNumber = async (registrationNumber) => {
+    try {
+      const doctorCollection = collection(db, "doctors");
+      const querySnapshot = await getDocs(
+        query(
+          doctorCollection,
+          where("registrationNumber", "==", registrationNumber)
+        )
+      );
+
+      const doctorData = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      console.log(JSON.stringify(doctorData)); // Log the data to verify
+
+      if (doctorData.length > 0) {
+        setDoctor(doctorData[0]);
+      } else {
+        setDoctor(null);
+        toast.error("No doctor found with the provided registration number");
+      }
+    } catch (error) {
+      console.error("Error fetching doctor by registration number:", error);
+      toast.error("Failed to fetch doctor. Please try again later.");
     }
   };
 
@@ -29,20 +41,20 @@ const AddDoctorForm = () => {
     <div className="p-4 flex flex-col gap-5 items-center">
       <h2 className="text-2xl font-bold">Search Doctor</h2>
       <Formik
-        initialValues={{ healthcardNumber: "" }}
+        initialValues={{ registrationNumber: "" }}
         validate={(values) => {
           const errors = {};
-          if (!values.healthcardNumber) {
-            errors.healthcardNumber = "Please enter a health card number";
-          } else if (!/^\d{10}$/i.test(values.healthcardNumber)) {
-            errors.healthcardNumber = "Health card number must be 10 digits";
+          if (!values.registrationNumber) {
+            errors.registrationNumber = "Please enter a registration number";
+          } else if (!/^\d{10}$/i.test(values.registrationNumber)) {
+            errors.registrationNumber = "Registration number must be 10 digits";
           }
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             console.log(values);
-            searchDoctor(values.healthcardNumber);
+            fetchDoctorByRegistrationNumber(values.registrationNumber);
             setSubmitting(false);
           }, 400);
         }}
@@ -64,17 +76,17 @@ const AddDoctorForm = () => {
             <div className="flex flex-col items-center gap-1">
               <input
                 type="text"
-                name="healthcardNumber"
-                placeholder="Health Card Number"
+                name="registrationNumber"
+                placeholder="Registration Number"
                 className="input input-bordered grow"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.healthcardNumber}
+                value={values.registrationNumber}
               />
               <p className="text-red-400 text-start w-full">
-                {errors.healthcardNumber &&
-                  touched.healthcardNumber &&
-                  errors.healthcardNumber}
+                {errors.registrationNumber &&
+                  touched.registrationNumber &&
+                  errors.registrationNumber}
               </p>
             </div>
             <button
@@ -87,7 +99,7 @@ const AddDoctorForm = () => {
           </form>
         )}
       </Formik>
-      {doctor ? <ProfileCard doctor={doctor} isAdded={false} /> : null}
+      {doctor && <ProfileCard doctor={doctor} isAdded={false} />}
     </div>
   );
 };
