@@ -10,9 +10,9 @@ import {
 } from "firebase/firestore";
 
 const SelectDoctorComponent = ({
-  setDoctorName,
+  setDoctorNameAndId,
   proceed,
-  userId = "eoNQGeX4y3d4kYjbra7ot147IRA2",
+  userId = "BcpxRzODsEbdkjo1vrcrftwu3L23",
 }) => {
   const { db } = UserAuth();
   const [doctors, setDoctors] = useState([]);
@@ -31,7 +31,6 @@ const SelectDoctorComponent = ({
         const doctorIds = new Set();
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          console.log(data);
           doctorIds.add(data.doctorId);
         });
 
@@ -42,12 +41,13 @@ const SelectDoctorComponent = ({
           })
         );
 
-        console.log(doctorData);
         setDoctors(doctorData);
+        setDoctorNameAndId(
+          doctorData[0].firstName + " " + doctorData[0].lastName,
+          doctorData[0].id
+        );
       } catch (error) {
         console.error("Error fetching accepted doctors:", error);
-        // setError("Failed to fetch accepted doctors. Please try again later.");
-        // setLoading(false);
       }
     };
 
@@ -55,7 +55,13 @@ const SelectDoctorComponent = ({
   }, [userId]);
 
   const handleSelectDoctor = (e) => {
-    setDoctorName(e.target.value);
+    const selectedDoctor = doctors.find(
+      (doctor) => doctor.id === e.target.value
+    );
+    setDoctorNameAndId(
+      selectedDoctor.firstName + " " + selectedDoctor.lastName,
+      selectedDoctor.id
+    ); // Pass both name and ID
   };
 
   return (
@@ -65,6 +71,7 @@ const SelectDoctorComponent = ({
         placeholder="Select option"
         className="select input input-bordered"
         onChange={handleSelectDoctor}
+        onSelect={handleSelectDoctor}
       >
         {doctors.map((doctor) => (
           <option key={doctor.id} value={doctor.id}>
