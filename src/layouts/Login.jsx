@@ -1,8 +1,18 @@
+import LoginForm from "../components/LoginForm";
 
 const Login = () => {
   return (
-    <div>Login</div>
-  )
-}
+    <div className="flex w-full justify-around items-center h-screen">
+      <div>
+        <img
+          src="/src/assets/heroimg.png"
+          alt="hero image"
+          className="w-full"
+        />
+      </div>
+      <LoginForm />
+    </div>
+  );
+};
 
-export default Login
+export default Login;

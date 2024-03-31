@@ -1,6 +1,6 @@
-import RegisterForm from "../components/RegisterForm";
+import DoctorRegisterForm from "../components/DoctorRegisterForm";
 
-const Register = () => {
+const DoctorsRegister = () => {
   return (
     <div className="h-[100vh] flex justify-around items-center">
       <div>
@@ -10,9 +10,12 @@ const Register = () => {
           className="w-full"
         />
       </div>
-      <RegisterForm />
+      {/* Register form for doctors */}
+      <div>
+        <DoctorRegisterForm />
+      </div>
     </div>
   );
 };
 
-export default Register;
+export default DoctorsRegister;
