@@ -4,7 +4,7 @@ import StepsSection from "../components/StepsSection";
 import AvailabilityMapper from "../components/AvailabilityMapper";
 import AdditionalInfoForm from "../components/AdditionalInfoForm";
 import LottieControl from "../components/LottieControl";
-import calander from "/src/assets/calander.json";
+import calander from "/public/images/calander.json";
 import SelectDoctorComponent from "../components/SelectDoctorComponent";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
