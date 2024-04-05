@@ -19,6 +19,7 @@ import DoctorsLogin from "./layouts/DoctorsLogin.jsx";
 import DoctorsDashboard from "./layouts/DoctorsDashboard.jsx";
 import DoctorsAppointments from "./layouts/DoctorsAppointments.jsx";
 import PatientRequests from "./layouts/PatientRequests.jsx";
+import AddPrescription from "./layouts/AddPrescription.jsx";
 
 const router = createBrowserRouter([
   {
@@ -133,6 +134,17 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/doctor/appointments/:id",
+    element: (
+      <NavbarLayout isDoctor={true}>
+        <DoctorsDashboard>
+          <h1>hello</h1>
+          <AddPrescription />
+        </DoctorsDashboard>
+      </NavbarLayout>
+    ),
+  },
+  {
     path: "/doctor/requests",
     element: (
       <NavbarLayout isDoctor={true}>
@@ -146,7 +158,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-      <RouterProvider router={router} />
-      <Toaster />
+    <RouterProvider router={router} />
+    <Toaster />
   </React.StrictMode>
 );

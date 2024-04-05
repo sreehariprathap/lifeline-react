@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 const DateBar = ({ days, getAppointmentsByDate }) => {
   const [selectedDay, setSelectedDay] = useState();
@@ -14,9 +15,8 @@ const DateBar = ({ days, getAppointmentsByDate }) => {
   }, [days]); // Run this effect when the days array changes
 
   const setSelectedDayHandler = (item) => {
-    console.log(item);
     setSelectedDay(item);
-    getAppointmentsByDate(item.date);
+    getAppointmentsByDate(dayjs(item.date).subtract(1, "day").format("YYYY-MM-DD"));
   };
 
   return (
