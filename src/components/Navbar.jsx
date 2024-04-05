@@ -23,7 +23,7 @@ const Navbar = ({ isLanding = false, isDoctor = false }) => {
     <div>
       <div className="navbar bg-primary-white fixed top-0 z-50 flex justify-between gap-4 items-center px-5">
         <div className="">
-          <img src="/src/assets/logo-blue.png" alt="logo" className="w-48" />
+          <img src="/images/logo-blue.png" alt="logo" className="w-48" />
         </div>
         {isLanding && (
           <div>

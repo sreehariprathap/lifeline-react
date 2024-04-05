@@ -34,10 +34,10 @@ function App() {
           />
         </div>
         <div>
-          <img src="/src/assets/heroimg.png" alt="hero image" />
+          <img src="/images/heroimg.png" alt="hero image" />
         </div>
       </div>
-      
+
       {/* info card section  */}
       <section className="flex gap-5 justify-center py-10">
         <InfoCard
@@ -60,7 +60,7 @@ function App() {
       {/* doctors trust section  */}
       <section className="h-screen flex justify-evenly gap-5 px-5 items-center">
         <div>
-          <img src="/src/assets/doctors-trust.png" alt="trustable doctors" />
+          <img src="/images/doctors-trust.png" alt="trustable doctors" />
         </div>
         <div className="w-[40%] flex items-start gap-3 flex-col justify-center">
           <p className="uppercase w-full text-start text-primary-green font-semibold">
@@ -86,7 +86,7 @@ function App() {
       {/* doctors expertise section  */}
       <section className="h-screen flex flex-row-reverse justify-evenly gap-5 px-5 items-center">
         <div>
-          <img src="/src/assets/visual.png" alt="trustable doctors" />
+          <img src="/images/Visual.png" alt="trustable doctors" />
         </div>
         <div className="w-[40%] flex items-start gap-3 flex-col justify-center">
           <p className="uppercase w-full text-start text-primary-green font-semibold">

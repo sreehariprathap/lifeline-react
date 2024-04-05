@@ -17,7 +17,6 @@ import { UserAuth } from "../contexts/AuthContext";
 const DoctorList = () => {
   const { db } = UserAuth();
   const userData = JSON.parse(localStorage.getItem("user"));
-  console.log(userData.user.uid);
   const userId = userData.user.uid;
 
   const [doctors, setDoctors] = useState([]);

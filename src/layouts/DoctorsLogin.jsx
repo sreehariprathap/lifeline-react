@@ -30,14 +30,10 @@ const DoctorsLogin = () => {
   return (
     <div className="flex w-full justify-around items-center h-[80vh]">
       <div className="flex w-[50%] justify-center items-center p-10">
-        <img
-          src="/src/assets/heroimg.png"
-          alt="hero image"
-          className="w-full"
-        />
+        <img src="/images/heroimg.png" alt="hero image" className="w-full" />
       </div>
       <div className="flex flex-col w-[50%] justify-center items-center gap-5">
-      <h2 className="text-2xl font-bold">Welcome Back</h2>
+        <h2 className="text-2xl font-bold">Welcome Back</h2>
         <Formik
           initialValues={{ email: "", password: "" }}
           validate={(values) => {
