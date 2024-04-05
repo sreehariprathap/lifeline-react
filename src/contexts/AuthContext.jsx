@@ -13,14 +13,17 @@ import { db } from "../firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import toast from "react-hot-toast";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
+// navigate("/appointments");
 // eslint-disable-next-line react/prop-types
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useLocalStorage("user", null);
   const [doctorData, setDoctorData] = useLocalStorage("doctor", null);
+  const navigate = useNavigate();
 
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
@@ -28,6 +31,7 @@ export const AuthContextProvider = ({ children }) => {
       .then((userCredential) => {
         setUserData(userCredential);
         console.log(userData);
+        navigate("/appointments");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -36,18 +40,33 @@ export const AuthContextProvider = ({ children }) => {
       });
   };
 
-  const loginWithEmailAndPassword = (email, password) => {
+  const loginWithEmailAndPassword = (email, password, isDoctor = false) => {
     const provider = new GoogleAuthProvider();
-    signInWithEmailAndPassword(provider, email, password)
-      .then((doctorCredential) => {
-        setDoctorData(doctorCredential);
-        console.log(doctorData);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
+    if (!isDoctor) {
+      signInWithEmailAndPassword(provider, email, password)
+        .then((userCredential) => {
+          setUserData(userCredential);
+          console.log(doctorData);
+          navigate("/appointments");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+        });
+    } else {
+      signInWithEmailAndPassword(provider, email, password)
+        .then((doctorCredential) => {
+          setDoctorData(doctorCredential);
+          console.log(doctorData);
+          navigate("/doctor/appointments");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+        });
+    }
   };
 
   const RegisterWithEmailAndPassword = (userData, isDoctor = false) => {
@@ -59,6 +78,8 @@ export const AuthContextProvider = ({ children }) => {
           console.log("Doctor credential", doctorCredential);
           userData.userId = doctorCredential.user.uid;
           setDoctorData(doctorCredential);
+          navigate("doctor/appointments");
+
           console.log(doctorData);
           userData.availabilityString = "AAAAAAAAAAAAAAAA";
           userData.isVerified = true;
@@ -78,6 +99,7 @@ export const AuthContextProvider = ({ children }) => {
           setUserData(userCredential);
           userData.userId = userCredential.user.uid;
           addUserToDatabase(userData);
+          navigate("/appointments");
         })
         .catch((error) => {
           const errorCode = error.code;

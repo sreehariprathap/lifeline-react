@@ -1,16 +1,16 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { UserAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const DoctorRegisterForm = () => {
   const { RegisterWithEmailAndPassword } = UserAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onFormRegister = async (values) => {
     try {
       await RegisterWithEmailAndPassword(values, true);
-      navigate("/doctor/appointments");
+      // navigate("/doctor/appointments");
       toast.success("Registration successful!");
     } catch (error) {
       console.error("Error registering:", error);

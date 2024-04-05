@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { AuthContextProvider } from "./contexts/AuthContext.jsx";
 import NavbarLayout from "./layouts/NavbarLayout.jsx";
 import Login from "./layouts/Login.jsx";
 import Register from "./layouts/Register.jsx";
@@ -147,9 +146,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthContextProvider>
       <RouterProvider router={router} />
       <Toaster />
-    </AuthContextProvider>
   </React.StrictMode>
 );

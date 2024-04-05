@@ -1,21 +1,19 @@
 import { Formik } from "formik";
 import { UserAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const RegisterForm = () => {
   const { googleSignIn, RegisterWithEmailAndPassword } = UserAuth();
-  const navigate = useNavigate();
 
   const onFormRegister = (values) => {
     RegisterWithEmailAndPassword(values);
-    navigate("/appointments");
+    // navigate("/appointments");
     toast.success("Registrtion successful!");
   };
 
   const handleGoogleSignIn = () => {
     googleSignIn().then(() => {
-      navigate("/appointments");
+      // navigate("/appointments");
       toast.success("Google registration successful!");
     });
   };
