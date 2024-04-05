@@ -4,11 +4,7 @@ const Register = () => {
   return (
     <div className="h-[100vh] flex justify-around items-center">
       <div>
-        <img
-          src="/src/assets/heroimg.png"
-          alt="hero image"
-          className="w-full"
-        />
+        <img src="/images/heroimg.png" alt="hero image" className="w-full" />
       </div>
       <RegisterForm />
     </div>

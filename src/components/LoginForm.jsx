@@ -117,11 +117,7 @@ const LoginForm = () => {
       </Formik>
       <div className="divider text-slate-950">OR</div>
       <button className="btn bg-slate-50" onClick={handleGoogleSignIn}>
-        <img
-          src="/src/assets/google.png"
-          alt="google logo"
-          className="w-5 h-5"
-        />
+        <img src="/images/google.png" alt="google logo" className="w-5 h-5" />
       </button>
     </div>
   );
