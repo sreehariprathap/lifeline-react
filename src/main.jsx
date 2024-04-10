@@ -138,7 +138,6 @@ const router = createBrowserRouter([
     element: (
       <NavbarLayout isDoctor={true}>
         <DoctorsDashboard>
-          <h1>hello</h1>
           <AddPrescription />
         </DoctorsDashboard>
       </NavbarLayout>

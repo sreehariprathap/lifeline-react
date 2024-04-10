@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import DateBar from "../components/DateBar";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { UserAuth } from "../contexts/AuthContext";
 import AppointmentCard from "../components/AppointmentCard";
 
@@ -63,11 +58,11 @@ const DoctorsAppointments = () => {
           if (userSnapshot.empty) {
             // Handle the case where no user document is found
             console.error("No user document found for userId:", userId);
-            return { ...appointmentData, user: null };
+            return { ...appointmentData, user: null, id: doc.id };
           } else {
             // Extract user data from the user document
             const userData = userSnapshot.docs[0].data();
-            return { ...appointmentData, user: userData };
+            return { ...appointmentData, user: userData, id: doc.id };
           }
         })
       );

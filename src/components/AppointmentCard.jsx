@@ -69,7 +69,12 @@ const AppointmentCard = ({ appointment, isDoctor = false }) => {
               <p>Office Location: {appointment.doctor.officeLocation}</p>
             )}
           </div>
-          <button className="btn btn-primary">Start appointment</button>
+          <a
+            href={`appointments/${appointment.id}`}
+            className="btn btn-primary"
+          >
+            Start appointment
+          </a>
           {/* Add more appointment details as needed */}
         </div>
       )}
