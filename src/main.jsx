@@ -20,6 +20,7 @@ import DoctorsDashboard from "./layouts/DoctorsDashboard.jsx";
 import DoctorsAppointments from "./layouts/DoctorsAppointments.jsx";
 import PatientRequests from "./layouts/PatientRequests.jsx";
 import AddPrescription from "./layouts/AddPrescription.jsx";
+import ViewPrescription from "./layouts/ViewPrescription.jsx";
 
 const router = createBrowserRouter([
   {
@@ -142,6 +143,10 @@ const router = createBrowserRouter([
         </DoctorsDashboard>
       </NavbarLayout>
     ),
+  },
+  {
+    path: "/prescription/:id",
+    element: <ViewPrescription />,
   },
   {
     path: "/doctor/requests",

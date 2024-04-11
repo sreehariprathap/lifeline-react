@@ -5,31 +5,35 @@ import AllergiesComponent from "./AllergiesComponent";
 import MedicinesComponent from "./MedicinesComponent";
 import SpecialConsiderationsComponent from "./SpecialConsiderationsComponent";
 
-const Prescription = ({ completeAppointment }) => {
+const Prescription = ({ completeAppointment, prescriptionId }) => {
   const [stage, setStage] = useState(0);
   const [step, setStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [prescription, setPrescription] = useState({});
+  const doctor = JSON.parse(localStorage.getItem("doctor"));
 
   // Function to update prescription object with values from each component
   const updatePrescription = (values) => {
-    setPrescription({ ...prescription, ...values });
+    setPrescription((prevPrescription) => ({
+      ...prevPrescription,
+      ...values,
+    }));
   };
 
   const handleProceed = (values) => {
     updatePrescription(values); // Update prescription object with values from components
-    setStage(stage + 1);
-    setStep(step + 1);
+    setStage((prevStage) => prevStage + 1);
+    setStep((prevStep) => prevStep + 1);
   };
 
-  const createPrescriptions = (values) => {
-    updatePrescription(values); // Update prescription object with values from SpecialConsiderationsComponent
-    setIsSubmitted(true);
+  const createPrescriptions = () => {
     completeAppointment(prescription);
+    setIsSubmitted(true);
   };
 
   return isSubmitted ? (
     <div className="bg-white rounded-lg w-full flex flex-col justify-center items-start py-5 gap-3 ">
+      {/* Display prescription details */}
       <div className="w-full flex flex-col gap-2">
         <p>
           <strong>Diagnosis:</strong> {prescription.diagnosis}
@@ -74,9 +78,23 @@ const Prescription = ({ completeAppointment }) => {
             ))}
           </tbody>
         </table>
-        <div className="w-full p-1 flex justify-between items-center">
-          <p>Signature: Dr. Jane Smith</p>
-          <button className="btn btn-primary">Print</button>
+        <div className="w-full btn-disabled p-1 flex justify-between items-center">
+          <p>
+            Signature: Dr. {doctor.firstName} {doctor.lastName}
+          </p>
+          <a
+            href={ `/prescription/${prescriptionId}`
+            }
+            target="_blank"
+          >
+            <button
+              className={`btn btn-primary ${
+                prescriptionId !== undefined ? "" : ""
+              }`}
+            >
+              Print
+            </button>
+          </a>
         </div>
       </div>
     </div>
@@ -102,7 +120,20 @@ const Prescription = ({ completeAppointment }) => {
           />
         )}
         {stage === 3 && (
-          <SpecialConsiderationsComponent onSubmit={createPrescriptions} />
+          <SpecialConsiderationsComponent
+            onNext={handleProceed}
+            onSubmit={updatePrescription}
+          />
+        )}
+        {stage === 4 && (
+          <div className="flex flex-col items-center justify-center gap-3">
+            <h1>complete prescription</h1>
+            <div className="p-">
+              <button className="btn btn-primary" onClick={createPrescriptions}>
+                Create prescription
+              </button>
+            </div>
+          </div>
         )}
       </div>
       <div>

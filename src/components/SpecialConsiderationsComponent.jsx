@@ -1,6 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
-const SpecialConsiderationsComponent = ({ onSubmit }) => {
+const SpecialConsiderationsComponent = ({ onNext }) => {
 
   return (
     <Formik
@@ -20,7 +20,7 @@ const SpecialConsiderationsComponent = ({ onSubmit }) => {
       }}
       onSubmit={(values, { setSubmitting }) => {
         console.log(JSON.stringify(values));
-        onSubmit(values);
+        onNext(values);
         setSubmitting(false);
       }}
     >

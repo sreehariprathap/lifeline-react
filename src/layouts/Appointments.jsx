@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import DateBar from "../components/DateBar";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  getDoc,
-  doc as document,
-} from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { UserAuth } from "../contexts/AuthContext";
 import AppointmentCard from "../components/AppointmentCard";
 
@@ -15,7 +8,7 @@ const Appointments = () => {
   const [days, setDays] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const { db } = UserAuth();
-  const user = JSON.parse(localStorage.getItem("user")).user;
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const generateDays = () => {
@@ -45,15 +38,19 @@ const Appointments = () => {
       const appointmentsData = await Promise.all(
         querySnapshot.docs.map(async (doc) => {
           const appointmentData = doc.data();
-          // Fetch doctor details
-          const doctorDoc = await getDoc(
-            document(db, "doctors", doc.data().doctorId)
+          const doctorQ = query(
+            collection(db, "doctors"),
+            where("userId", "==", appointmentData.doctorId)
           );
-          const doctorData = doctorDoc.data();
-          return { ...appointmentData, doctor: doctorData };
+          const doctorSnapshot = await getDocs(doctorQ);
+          const doctorData = doctorSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          return { ...appointmentData, doctor: doctorData[0] };
         })
       );
-
+      console.log(appointmentsData);
       setAppointments(appointmentsData);
     } catch (error) {
       console.error("Error fetching appointments:", error);

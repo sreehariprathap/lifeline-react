@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
@@ -16,6 +17,7 @@ const AddPrescription = () => {
   const { db } = UserAuth();
   const { id } = useParams();
   const [appointment, setAppointment] = useState(null);
+  const [prescriptionId, setPrescriptionId] = useState(null);
 
   // Function to calculate age from date of birth
   const calculateAge = (dob) => {
@@ -45,17 +47,31 @@ const AddPrescription = () => {
 
         const appointmentData = appointmentSnapshot.data();
         const userId = appointmentData.userId;
+        const doctorId = "eoNQGeX4y3d4kYjbra7ot147IRA2";
 
         const appointmentsRef = collection(db, "users");
         const q = query(appointmentsRef, where("userId", "==", userId));
         const querySnapshot = await getDocs(q);
+
+        const docRef = collection(db, "doctors");
+        const p = query(docRef, where("userId", "==", doctorId));
+        const docQuerySnapshot = await getDocs(p);
 
         const userData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        const appointmentWithUser = { ...appointmentData, user: userData[0] };
+        const doctorData = docQuerySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const appointmentWithUser = {
+          ...appointmentData,
+          user: userData[0],
+          doctor: doctorData[0],
+        };
         console.log(JSON.stringify(appointmentWithUser));
         setAppointment(appointmentWithUser);
       } catch (error) {
@@ -66,9 +82,26 @@ const AddPrescription = () => {
     fetchAppointment();
   }, [id]);
 
-  const createPrescription =(prescrption)=>{
-    
-  }
+  const createPrescription = async (prescription) => {
+    try {
+      const prescriptionData = { ...prescription, appointment };
+      // Add appointment to Firestore prescriptions collection
+      const prescriptionRef = await addDoc(
+        collection(db, "prescriptions"),
+        prescriptionData
+      );
+
+      // Access the ID of the added document from the prescriptionRef
+      const prescriptionId = prescriptionRef.id;
+
+      // You can use the prescriptionId as needed
+      console.log("Added prescription with ID:", prescriptionId);
+      setPrescriptionId(prescriptionId);
+    } catch (error) {
+      console.error("Error creating prescription:", error);
+      // Handle error as needed
+    }
+  };
 
   return (
     <div>
@@ -138,7 +171,10 @@ const AddPrescription = () => {
             </div>
             <div className="divider"></div>
             <div>
-              <Prescription completeAppointment={createPrescription} />
+              <Prescription
+                completeAppointment={createPrescription}
+                prescriptionId={prescriptionId}
+              />
             </div>
           </div>
         </div>

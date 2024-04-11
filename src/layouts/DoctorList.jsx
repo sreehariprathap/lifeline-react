@@ -7,19 +7,18 @@ import {
   getDocs,
   query,
   where,
-  doc as document,
-  getDoc,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { UserAuth } from "../contexts/AuthContext";
-
+import Loader from "../components/Loader";
 
 const DoctorList = () => {
   const { db } = UserAuth();
   const userData = JSON.parse(localStorage.getItem("user"));
-  const userId = userData.user.uid;
+  const userId = userData.uid;
 
   const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAcceptedDoctors = async () => {
@@ -41,22 +40,32 @@ const DoctorList = () => {
 
         const doctorData = await Promise.all(
           Array.from(doctorIds).map(async (doctorId) => {
-            const doctorDoc = await getDoc(document(db, "doctors", doctorId));
-            return { id: doctorDoc.id, ...doctorDoc.data() };
+            const doctorsRef = collection(db, "doctors");
+            const q = query(doctorsRef, where("userId", "==", doctorId));
+            const querySnapshot = await getDocs(q);
+
+            const doctorData = querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+
+            return { id: doctorData.id, ...doctorData[0] };
           })
         );
 
         console.log(doctorData);
         setDoctors(doctorData);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching accepted doctors:", error);
+        setLoading(false);
         // setError("Failed to fetch accepted doctors. Please try again later.");
-        // setLoading(false);
       }
     };
 
     fetchAcceptedDoctors();
   }, [userId]);
+
   return (
     <div className="flex flex-col gap-3">
       <div className="w-full flex justify-between items-center">
@@ -69,11 +78,19 @@ const DoctorList = () => {
           </AppIcon>
         </Link>
       </div>
-      <div className=" flex flex-wrap gap-2">
-        {doctors.map((doctor, index) => (
-          <ProfileCard key={index} doctor={doctor} isListing={true} />
-        ))}
-      </div>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className=" flex flex-wrap gap-2">
+          {doctors.length === 0 ? (
+            <p>No doctors found. Please add a doctor to continue.</p>
+          ) : (
+            doctors.map((doctor, index) => (
+              <ProfileCard key={index} doctor={doctor} isListing={true} />
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };

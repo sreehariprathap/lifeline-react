@@ -1,16 +1,15 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useEffect, useState } from "react";
 import DateBar from "../components/DateBar";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { UserAuth } from "../contexts/AuthContext";
 import AppointmentCard from "../components/AppointmentCard";
 
-// const user = JSON.parse(localStorage.getItem("user")).user;
-
 const DoctorsAppointments = () => {
   const [days, setDays] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const { db } = UserAuth();
-  const user = JSON.parse(localStorage.getItem("user")).user;
+  const doctor = JSON.parse(localStorage.getItem("doctor"));
 
   useEffect(() => {
     const generateDays = () => {
@@ -30,44 +29,43 @@ const DoctorsAppointments = () => {
   const getAppointmentsByDate = async (date) => {
     try {
       const appointmentsRef = collection(db, "appointments");
-      const usersRef = collection(db, "users");
 
       // Query for appointments
       const q = query(
         appointmentsRef,
         where("date", "==", date),
-        where("doctorId", "==", "diHDXrbRlpGjauw1Tqzz") //user.uid
+        where(
+          "doctorId",
+          "==",
+          JSON.parse(localStorage.getItem("doctor")).userId
+        )
       );
 
       // Fetch query snapshots
-      const [appointmentsSnapshot] = await Promise.all([getDocs(q)]);
+      const appointmentsSnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.data());
+      });
 
       // Fetch user data for each appointment
       const appointmentsData = await Promise.all(
         appointmentsSnapshot.docs.map(async (doc) => {
           const appointmentData = doc.data();
 
-          // Get the userId from the appointment
-          const userId = appointmentData.userId;
-
           // Query for the user document based on the userId
-          const userQuery = query(usersRef, where("userId", "==", userId));
+          const userQuery = query(
+            collection(db, "users"),
+            where("userId", "==", appointmentData.userId)
+          );
           const userSnapshot = await getDocs(userQuery);
+          const userData = userSnapshot.docs.map((doc) => doc.data())[0];
 
-          // Check if userSnapshot contains any documents
-          if (userSnapshot.empty) {
-            // Handle the case where no user document is found
-            console.error("No user document found for userId:", userId);
-            return { ...appointmentData, user: null, id: doc.id };
-          } else {
-            // Extract user data from the user document
-            const userData = userSnapshot.docs[0].data();
-            return { ...appointmentData, user: userData, id: doc.id };
-          }
+          return { ...appointmentData, user: userData, id: doc.id };
         })
       );
 
-      console.log(appointmentsData);
       setAppointments(appointmentsData);
     } catch (error) {
       console.error("Error fetching appointments:", error);
@@ -76,22 +74,27 @@ const DoctorsAppointments = () => {
 
   return (
     <div className="">
-      <h1 className="app-header capitalize">Hello, {user.displayName}</h1>
+      <h1 className="app-header capitalize">
+        Hello, {doctor.firstName} {doctor.lastName}
+      </h1>
       <DateBar days={days} getAppointmentsByDate={getAppointmentsByDate} />
       <div>
         {appointments.length !== 0 &&
-          appointments.map((appointment, index) => (
-            <AppointmentCard
-              key={index}
-              appointment={appointment}
-              isDoctor={true}
-            />
-          ))}
+          appointments.map(
+            (appointment) => (
+              <AppointmentCard
+                key={appointment.id}
+                appointment={appointment}
+                isDoctor={true}
+              />
+            )
+            // JSON.stringify(appointment)
+          )}
       </div>
       {!appointments.length && (
-        <div className="bg-white  w-full rounded-md shadow-md p-5">
+        <div className="bg-white w-full rounded-md shadow-md p-5">
           <h1 className="text-4xl font-normal text-primary-color">
-            You dont have any appointments for today
+            You don't have any appointments for today
           </h1>
         </div>
       )}

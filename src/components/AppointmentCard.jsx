@@ -8,6 +8,7 @@ const AppointmentCard = ({ appointment, isDoctor = false }) => {
   };
 
   const userData = appointment.user; // Access userData from appointment.user
+  console.log(appointment);
 
   // Function to calculate age from date of birth
   const calculateAge = (dob) => {
@@ -69,12 +70,14 @@ const AppointmentCard = ({ appointment, isDoctor = false }) => {
               <p>Office Location: {appointment.doctor.officeLocation}</p>
             )}
           </div>
-          <a
-            href={`appointments/${appointment.id}`}
-            className="btn btn-primary"
-          >
-            Start appointment
-          </a>
+          {isDoctor && (
+            <a
+              href={`appointments/${appointment.id}`}
+              className="btn btn-primary"
+            >
+              Start appointment
+            </a>
+          )}
           {/* Add more appointment details as needed */}
         </div>
       )}

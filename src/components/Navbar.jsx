@@ -74,11 +74,7 @@ const Navbar = ({ isLanding = false, isDoctor = false }) => {
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src={
-                    user
-                      ? user.photoURL
-                      : "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                  }
+                  src={user.photoURL ? user.photoURL : "/images/icon1.png"}
                 />
               </div>
             </div>
