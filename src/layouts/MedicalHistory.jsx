@@ -18,22 +18,26 @@ const MedicalHistory = () => {
           where("userId", "==", userId)
         );
         const querySnapshot = await getDocs(q);
-
+  
         const prescriptionsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        console.log(userId);
-        console.log(JSON.stringify(prescriptionsData));
+  
+        // Sort prescriptionsData based on prescription.date
+        prescriptionsData.sort((a, b) => {
+          return new Date(b.date) - new Date(a.date);
+        });
+  
         setPrescriptions(prescriptionsData);
       } catch (error) {
         console.error("Error fetching prescriptions:", error);
       }
     };
-
+  
     fetchPrescriptions();
   }, [db, userId]);
-
+  
   return (
     <div className="max-h-[80vh] ">
       <h1 className="app-header">Medical History and Prescriptions</h1>

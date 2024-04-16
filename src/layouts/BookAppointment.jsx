@@ -1,3 +1,4 @@
+// BookAppointment.js
 import { useState } from "react";
 import { DatePicker } from "antd";
 import StepsSection from "../components/StepsSection";
@@ -42,7 +43,7 @@ const BookAppointment = () => {
   const handleDoctorNameAndId = (doctorName, doctorId) => {
     setDoctorName(doctorName);
     setDoctorId(doctorId);
-    handleProceed(); // Move handleProceed call here to ensure stage transition
+    // Do not call handleProceed here to ensure stage transition only when Proceed button is clicked
   };
 
   const createAppointment = async (additionalInfo) => {

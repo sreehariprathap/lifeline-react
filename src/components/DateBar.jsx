@@ -12,15 +12,20 @@ const DateBar = ({ getAppointmentsByDate }) => {
         const date = currentDate.add(index, "day"); // Increment date by index
         const dayOfWeek = date.format("dddd"); // Format day of the week
         const formattedDate = date.format("YYYY-MM-DD"); // Format date as "YYYY-MM-DD"
-        getAppointmentsByDate(formattedDate);
-        setSelectedDay(dayjs().format("YYYY-MM-DD"));
         return { day: dayOfWeek, date: formattedDate };
       });
       setDays(next14Days);
+  
+      // Get current day's date
+      const currentDayDate = dayjs().format("YYYY-MM-DD");
+      setSelectedDay(currentDayDate);
+  
+      // Fetch appointments for the current day
+      getAppointmentsByDate(currentDayDate);
     };
     generateDays();
   }, []); // Empty dependency array ensures this effect runs only once on component mount
-
+  
   const setSelectedDayHandler = (item) => {
     setSelectedDay(item.date);
     getAppointmentsByDate(item.date);

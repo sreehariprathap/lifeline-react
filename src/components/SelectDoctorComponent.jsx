@@ -1,3 +1,4 @@
+// SelectDoctorComponent.js
 import { useEffect, useState } from "react";
 import { UserAuth } from "../contexts/AuthContext";
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -9,6 +10,7 @@ const SelectDoctorComponent = ({
 }) => {
   const { db } = UserAuth();
   const [doctors, setDoctors] = useState([]);
+  const [selectedDoctorId, setSelectedDoctorId] = useState(""); // Initialize selectedDoctorId to an empty string
 
   useEffect(() => {
     const fetchAcceptedDoctors = async () => {
@@ -34,7 +36,7 @@ const SelectDoctorComponent = ({
             const querySnapshot = await getDocs(q);
 
             const doctorData = querySnapshot.docs.map((doc) => ({
-              ...doc.data()
+              ...doc.data(),
             }));
 
             return { id: doctorData.id, ...doctorData[0] };
@@ -52,6 +54,8 @@ const SelectDoctorComponent = ({
 
   const handleSelectDoctor = (e) => {
     const selectedDoctorId = e.target.value;
+    setSelectedDoctorId(selectedDoctorId); // Update selectedDoctorId
+
     const selectedDoctor = doctors.find(
       (doctor) => doctor.userId === selectedDoctorId
     );
@@ -60,7 +64,7 @@ const SelectDoctorComponent = ({
       setDoctorNameAndId(
         `${selectedDoctor.firstName} ${selectedDoctor.lastName}`,
         selectedDoctor.userId
-      ); // Pass both name and ID
+      );
     }
   };
 
@@ -74,13 +78,18 @@ const SelectDoctorComponent = ({
             className="select input input-bordered"
             onChange={handleSelectDoctor}
           >
+            <option value="">Select Doctor</option> {/* Add default option */}
             {doctors.map((doctor) => (
               <option key={doctor.userId} value={doctor.userId}>
                 {doctor.firstName} {doctor.lastName} - {doctor.specialization}
               </option>
             ))}
           </select>
-          <button className="btn btn-primary" onClick={proceed}>
+          <button
+            className="btn btn-primary mt-40"
+            onClick={proceed}
+            disabled={!selectedDoctorId} // Disable the button if no doctor is selected
+          >
             Proceed
           </button>
         </>
