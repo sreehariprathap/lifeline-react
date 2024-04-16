@@ -15,7 +15,7 @@ const ProfileCard = ({ doctor, isListing = false }) => {
 
       await addDoc(requestRef, {
         userId: user.uid,
-        doctorId: doctor.id,
+        doctorId: doctor.userId,
         createdAt: serverTimestamp(),
         isAccepted: false,
       });

@@ -10,7 +10,7 @@ const Navbar = ({ isLanding = false, isDoctor = false }) => {
 
   const handleLogout = async () => {
     try {
-      await logOut(); // Wait for the logout operation to complete
+      isDoctor ? await logOut(true) : await logOut();
       navigate("/"); // Redirect the user to the homepage after logout
       toast.success("User logged out"); // Display a success message
     } catch (error) {
@@ -27,10 +27,16 @@ const Navbar = ({ isLanding = false, isDoctor = false }) => {
         </div>
         {isLanding && (
           <div>
-            <ul className="flex gap-5 text-slate-900">
-              <li>Home</li>
-              <li>About Us</li>
-              <li>How It Works</li>
+            <ul className="flex gap-5 text-slate-900 uppercase">
+              <li>
+                <a href="#home">Home</a>
+              </li>
+              <li>
+                <a href="#about">About Us</a>
+              </li>
+              <li>
+                <a href="#services">Services</a>
+              </li>
             </ul>
           </div>
         )}
@@ -73,11 +79,13 @@ const Navbar = ({ isLanding = false, isDoctor = false }) => {
             >
               <div className="w-10 rounded-full">
                 <img
-                  alt="Tailwind CSS Navbar component"
+                  alt="User Avatar"
                   src={
-                    user
+                    !isDoctor
                       ? user.photoURL
-                      : "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                        ? user.photoURL
+                        : "/images/icon1.png"
+                      : "/images/icon1.png"
                   }
                 />
               </div>
@@ -87,13 +95,13 @@ const Navbar = ({ isLanding = false, isDoctor = false }) => {
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
             >
               <li>
-                <a className="justify-between">
+                <a
+                  href={isDoctor ? "/doctor/profile" : "/profile"}
+                  className="justify-between"
+                >
                   Profile
                   <span className="badge">New</span>
                 </a>
-              </li>
-              <li>
-                <a>Settings</a>
               </li>
               <li>
                 <a onClick={handleLogout}>Logout</a>

@@ -14,7 +14,7 @@ function App() {
   return (
     <>
       {/* hero section  */}
-      <div className="flex flex-row justify-evenly gap-5 px-5 mb-5">
+      <div className="flex flex-row justify-evenly gap-5 px-5 mb-5"id="home">
         <div className="w-[40%] flex items-start gap-3 flex-col justify-center">
           <p className="uppercase w-full text-start text-primary-green font-semibold">
             Presents
@@ -24,8 +24,11 @@ function App() {
             you can trust
           </h1>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti
-            eaque, neque repudiandae esse repellendus.
+            Bridging the Gap Between Doctors and Patients. Our app seamlessly
+            connects patients with trusted doctors, ensuring prompt, reliable
+            healthcare access. With Lifeline, find your dedicated doctor, ready
+            to provide expert care at your fingertips. Trust, convenience, and
+            quality care, all in one place.
           </p>
           <AppButton
             link={!user ? "/login" : "/appointments"}
@@ -42,23 +45,23 @@ function App() {
       <section className="flex gap-5 justify-center py-10">
         <InfoCard
           icon={<FiClock className="w-8 h-8" />}
-          title={"dummy"}
-          textContent={"lorem isum duy dummy dummy 2"}
+          title={"Scheduled appointments"}
+          textContent={"create timely appointments"}
         />
         <InfoCard
           icon={<FiCheckCircle className="w-8 h-8" />}
-          title={"dummy"}
-          textContent={"lorem isum duy dummy dummy 2"}
+          title={"Easy prescription"}
+          textContent={"Prescription has never been easier"}
         />
         <InfoCard
           icon={<FiHeart className="w-8 h-8" />}
-          title={"dummy"}
-          textContent={"lorem isum duy dummy dummy 2"}
+          title={"Quality guaranteed"}
+          textContent={"Connecting with the best"}
         />
       </section>
 
       {/* doctors trust section  */}
-      <section className="h-screen flex justify-evenly gap-5 px-5 items-center">
+      <section className="h-screen flex justify-evenly gap-5 px-5 items-center" id="about">
         <div>
           <img src="/images/doctors-trust.png" alt="trustable doctors" />
         </div>
@@ -70,10 +73,8 @@ function App() {
             Dedicated doctors with the core mission to help
           </h1>
           <p>
-            orem ipsum dolor sit amet, consectetur adipiscing elit. Quam proin
-            nibh cursus at sed sagittis amet, sed. Tristique id nibh lobortis
-            nunc elementum. Tellus quam mauris aenean turpis vulputate sodales
-            nullam lobortis. Vulputate tortor tincidun.
+            Lifeline brings together a network of compassionate doctors, driven
+            by the core mission of providing unwavering support and care.
           </p>
           <AppButton
             link={!user ? "/login" : "/appointments"}
@@ -84,7 +85,7 @@ function App() {
       </section>
 
       {/* doctors expertise section  */}
-      <section className="h-screen flex flex-row-reverse justify-evenly gap-5 px-5 items-center">
+      <section className="h-screen flex flex-row-reverse justify-evenly gap-5 px-5 items-center" id="services">
         <div>
           <img src="/images/Visual.png" alt="trustable doctors" />
         </div>
@@ -96,10 +97,13 @@ function App() {
             Experienced in multiple medical practices
           </h1>
           <p>
-            orem ipsum dolor sit amet, consectetur adipiscing elit. Quam proin
-            nibh cursus at sed sagittis amet, sed. Tristique id nibh lobortis
-            nunc elementum. Tellus quam mauris aenean turpis vulputate sodales
-            nullam lobortis. Vulputate tortor tincidun.
+            Your Trusted Partner for Quality Solutions. With a wealth of
+            expertise, we specialize in delivering top-notch services tailored
+            to meet your needs. From consultation to execution, our seasoned
+            professionals ensure a seamless experience, providing innovative
+            solutions and unparalleled support. Trust us to elevate your
+            business with our proven track record of excellence and dedication
+            to customer satisfaction
           </p>
           <AppButton
             link={!user ? "/login" : "/appointments"}

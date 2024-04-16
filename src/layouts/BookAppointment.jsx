@@ -4,7 +4,7 @@ import StepsSection from "../components/StepsSection";
 import AvailabilityMapper from "../components/AvailabilityMapper";
 import AdditionalInfoForm from "../components/AdditionalInfoForm";
 import LottieControl from "../components/LottieControl";
-import calander from "/public/images/calander.json";
+import calander from "../assets/calander.json"; // Corrected import path
 import SelectDoctorComponent from "../components/SelectDoctorComponent";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -23,7 +23,6 @@ const BookAppointment = () => {
   const [selectedSlot, setSelectedSlot] = useState("");
   const [modifiedAvailability, setModifiedAvailability] = useState("");
 
-  // eslint-disable-next-line arrow-body-style
   const disabledDate = (current) => {
     const today = dayjs();
     const futureLimit = today.add(14, "day").endOf("day");
@@ -41,9 +40,9 @@ const BookAppointment = () => {
   };
 
   const handleDoctorNameAndId = (doctorName, doctorId) => {
-    console.log(doctorName, doctorId);
     setDoctorName(doctorName);
     setDoctorId(doctorId);
+    handleProceed(); // Move handleProceed call here to ensure stage transition
   };
 
   const createAppointment = async (additionalInfo) => {
@@ -55,14 +54,12 @@ const BookAppointment = () => {
         slot: selectedSlot,
         additionalInfo: additionalInfo,
         modifiedAvailability: modifiedAvailability,
-        userId: JSON.parse(localStorage.getItem("user")).user.uid,
+        userId: JSON.parse(localStorage.getItem("user")).uid,
       };
 
-      // Add appointment to Firestore appointments collection
       const appointmentsRef = collection(db, "appointments");
       await addDoc(appointmentsRef, appointment);
 
-      // Update state to indicate submission
       setIsSubmit(true);
     } catch (error) {
       console.error("Error creating appointment:", error);
@@ -70,11 +67,9 @@ const BookAppointment = () => {
     }
   };
 
-  // Calculate the minimum date (next day)
   const minDate = new Date();
   minDate.setDate(minDate.getDate() + 1);
 
-  // Calculate the maximum date (two weeks from today)
   const maxDate = new Date();
   maxDate.setDate(maxDate.getDate() + 14);
 
@@ -88,7 +83,7 @@ const BookAppointment = () => {
       <div className="flex justify-center">
         {stage === 0 && (
           <SelectDoctorComponent
-            setDoctorNameAndId={handleDoctorNameAndId} // Pass the handleDoctorNameAndId function
+            setDoctorNameAndId={handleDoctorNameAndId}
             proceed={handleProceed}
           />
         )}
@@ -102,10 +97,7 @@ const BookAppointment = () => {
         {stage === 2 && (
           <AvailabilityMapper
             availabilityString={"AABABNNAA"}
-            onSlotSelect={(
-              modifiedAvailabilityString,
-              { startTime, endTime }
-            ) => {
+            onSlotSelect={(modifiedAvailabilityString, { startTime, endTime }) => {
               setSelectedSlot(`${startTime}-${endTime}`);
               setModifiedAvailability(modifiedAvailabilityString);
               handleProceed();

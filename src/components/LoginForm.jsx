@@ -10,7 +10,7 @@ const LoginForm = () => {
     const [email, password] = values;
     try {
       await loginWithEmailAndPassword(email, password);
-      navigate("/appointments");
+      // navigate("/appointments");
       toast.success("Login successful!");
     } catch (error) {
       // Handle any errors that might occur during login
@@ -24,7 +24,7 @@ const LoginForm = () => {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      navigate("/appointments");
+      // navigate("/appointments");
       toast.success("Google login successful!");
     } catch (error) {
       // Handle any errors that might occur during Google sign-in

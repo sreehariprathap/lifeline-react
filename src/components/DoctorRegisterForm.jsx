@@ -1,16 +1,13 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { UserAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const DoctorRegisterForm = () => {
   const { RegisterWithEmailAndPassword } = UserAuth();
-  const navigate = useNavigate();
 
   const onFormRegister = async (values) => {
     try {
       await RegisterWithEmailAndPassword(values, true);
-      navigate("/doctor/appointments");
       toast.success("Registration successful!");
     } catch (error) {
       console.error("Error registering:", error);
@@ -21,7 +18,6 @@ const DoctorRegisterForm = () => {
   const validate = (values) => {
     const errors = {};
 
-    // Add validation rules for each field
     if (!values.firstName) {
       errors.firstName = "First Name is required";
     }
@@ -37,8 +33,17 @@ const DoctorRegisterForm = () => {
     }
 
     if (!values.password) {
-      errors.password = "Password number is required";
+      errors.password = "Password is required";
+    } else if (values.password.length < 6) {
+      errors.password = "Password must be at least 6 characters long";
     }
+
+    if (!values.confirmPassword) {
+      errors.confirmPassword = "Confirm Password is required";
+    } else if (values.confirmPassword !== values.password) {
+      errors.confirmPassword = "Passwords do not match";
+    }
+
     if (!values.phone) {
       errors.phone = "Phone number is required";
     }
@@ -68,6 +73,7 @@ const DoctorRegisterForm = () => {
           lastName: "",
           email: "",
           password: "",
+          confirmPassword: "",
           phone: "",
           registrationNumber: "",
           officeLocation: "",
@@ -81,17 +87,15 @@ const DoctorRegisterForm = () => {
       >
         {({ isSubmitting }) => (
           <Form className="w-full max-w-md gap-2 flex flex-col py-5">
+            {/* First Name and Last Name fields */}
             <div className="flex flex-col gap-1">
               <div className="grid grid-cols-2 gap-5">
-                {/* First Name field */}
                 <Field
                   type="text"
                   name="firstName"
                   placeholder="First Name"
                   className="input"
                 />
-
-                {/* Last Name field */}
                 <Field
                   type="text"
                   name="lastName"
@@ -99,7 +103,6 @@ const DoctorRegisterForm = () => {
                   className="input"
                 />
               </div>
-              {/* Error messages for First Name and Last Name */}
               <div className="grid grid-cols-2 gap-5">
                 <ErrorMessage
                   name="firstName"
@@ -129,12 +132,12 @@ const DoctorRegisterForm = () => {
               />
             </div>
 
-            {/* Password field */}
+            {/* Password and Confirm Password fields */}
             <div className="flex flex-col gap-1">
               <Field
                 type="password"
                 name="password"
-                placeholder="password"
+                placeholder="Password"
                 className="input"
               />
               <ErrorMessage
@@ -142,9 +145,21 @@ const DoctorRegisterForm = () => {
                 component="div"
                 className="text-red-400"
               />
+              <Field
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                className="input"
+              />
+              <ErrorMessage
+                name="confirmPassword"
+                component="div"
+                className="text-red-400"
+              />
             </div>
 
-            {/* Phone field */}
+            {/* Phone, Registration Number, Office Location, and Specialization fields */}
+            {/* Implement the remaining fields similarly */}
             <div className="flex flex-col gap-1">
               <Field
                 type="text"

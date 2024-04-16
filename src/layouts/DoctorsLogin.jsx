@@ -1,17 +1,14 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { UserAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const DoctorsLogin = () => {
   const { loginWithEmailAndPassword } = UserAuth();
-  const navigate = useNavigate();
 
   const onCredentialLogin = async (values) => {
     const { email, password } = values;
     try {
-      await loginWithEmailAndPassword(email, password);
-      navigate("/dashboard");
+      await loginWithEmailAndPassword(email, password, true);
       toast.success("Login successful!");
     } catch (error) {
       console.error("Error logging in:", error);

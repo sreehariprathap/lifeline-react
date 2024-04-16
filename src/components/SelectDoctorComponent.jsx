@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
 import { UserAuth } from "../contexts/AuthContext";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  doc as document,
-  getDoc,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const SelectDoctorComponent = ({
   setDoctorNameAndId,
   proceed,
-  userId = "BcpxRzODsEbdkjo1vrcrftwu3L23",
+  userId = JSON.parse(localStorage.getItem("user")).uid,
 }) => {
   const { db } = UserAuth();
   const [doctors, setDoctors] = useState([]);
@@ -36,52 +29,66 @@ const SelectDoctorComponent = ({
 
         const doctorData = await Promise.all(
           Array.from(doctorIds).map(async (doctorId) => {
-            const doctorDoc = await getDoc(document(db, "doctors", doctorId));
-            return { id: doctorDoc.id, ...doctorDoc.data() };
+            const doctorsRef = collection(db, "doctors");
+            const q = query(doctorsRef, where("userId", "==", doctorId));
+            const querySnapshot = await getDocs(q);
+
+            const doctorData = querySnapshot.docs.map((doc) => ({
+              ...doc.data()
+            }));
+
+            return { id: doctorData.id, ...doctorData[0] };
           })
         );
-
+        console.log(doctorData);
         setDoctors(doctorData);
-        setDoctorNameAndId(
-          doctorData[0].firstName + " " + doctorData[0].lastName,
-          doctorData[0].id
-        );
       } catch (error) {
         console.error("Error fetching accepted doctors:", error);
       }
     };
 
     fetchAcceptedDoctors();
-  }, [userId]);
+  }, [userId, db, setDoctorNameAndId]);
 
   const handleSelectDoctor = (e) => {
+    const selectedDoctorId = e.target.value;
     const selectedDoctor = doctors.find(
-      (doctor) => doctor.id === e.target.value
+      (doctor) => doctor.userId === selectedDoctorId
     );
-    setDoctorNameAndId(
-      selectedDoctor.firstName + " " + selectedDoctor.lastName,
-      selectedDoctor.id
-    ); // Pass both name and ID
+
+    if (selectedDoctor) {
+      setDoctorNameAndId(
+        `${selectedDoctor.firstName} ${selectedDoctor.lastName}`,
+        selectedDoctor.userId
+      ); // Pass both name and ID
+    }
   };
 
   return (
     <div className="flex flex-col gap-3">
       <h1>Select doctor to book an appointment</h1>
-      <select
-        placeholder="Select option"
-        className="select input input-bordered"
-        onChange={handleSelectDoctor}
-        onSelect={handleSelectDoctor}
-      >
-        {doctors.map((doctor) => (
-          <option key={doctor.id} value={doctor.id}>
-            {doctor.firstName} {doctor.lastName} - {doctor.specialization}
-          </option>
-        ))}
-      </select>
-      <button className="btn btn-primary" onClick={proceed}>
-        Proceed
-      </button>
+      {doctors.length ? (
+        <>
+          <select
+            placeholder="Select option"
+            className="select input input-bordered"
+            onChange={handleSelectDoctor}
+          >
+            {doctors.map((doctor) => (
+              <option key={doctor.userId} value={doctor.userId}>
+                {doctor.firstName} {doctor.lastName} - {doctor.specialization}
+              </option>
+            ))}
+          </select>
+          <button className="btn btn-primary" onClick={proceed}>
+            Proceed
+          </button>
+        </>
+      ) : (
+        <div>
+          <h2>Please add a doctor to continue</h2>
+        </div>
+      )}
     </div>
   );
 };

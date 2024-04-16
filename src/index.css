@@ -20,10 +20,18 @@
   color: #0b132b;
 }
 
+body {
+  @apply bg-primary-white;
+}
+
 .app-header {
   @apply text-3xl font-semibold;
 }
 
 * {
   @apply scrollbar-hide;
+}
+
+html {
+  scroll-behavior: smooth;
 }
