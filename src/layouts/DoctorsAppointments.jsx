@@ -1,30 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DateBar from "../components/DateBar";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { UserAuth } from "../contexts/AuthContext";
 import AppointmentCard from "../components/AppointmentCard";
 
 const DoctorsAppointments = () => {
-  const [days, setDays] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const { db } = UserAuth();
   const doctor = JSON.parse(localStorage.getItem("doctor"));
-
-  useEffect(() => {
-    const generateDays = () => {
-      const currentDate = new Date(); // Get today's date
-      const next14Days = Array.from({ length: 14 }, (_, index) => {
-        const date = new Date();
-        date.setDate(currentDate.getDate() + index); // Increment date by index
-        const dayOfWeek = date.toLocaleDateString("en-US", { weekday: "long" });
-        const formattedDate = date.toISOString().split("T")[0]; // Format date as "YYYY-MM-DD"
-        return { day: dayOfWeek, date: formattedDate };
-      });
-      setDays(next14Days);
-    };
-    generateDays();
-  }, []); // Empty dependency array ensures this effect runs only once on component mount
 
   const getAppointmentsByDate = async (date) => {
     try {
@@ -43,11 +27,6 @@ const DoctorsAppointments = () => {
 
       // Fetch query snapshots
       const appointmentsSnapshot = await getDocs(q);
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.data());
-      });
 
       // Fetch user data for each appointment
       const appointmentsData = await Promise.all(
@@ -77,7 +56,7 @@ const DoctorsAppointments = () => {
       <h1 className="app-header capitalize">
         Hello, {doctor.firstName} {doctor.lastName}
       </h1>
-      <DateBar days={days} getAppointmentsByDate={getAppointmentsByDate} />
+      <DateBar getAppointmentsByDate={getAppointmentsByDate} />
       <div>
         {appointments.length !== 0 &&
           appointments.map(

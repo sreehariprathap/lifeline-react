@@ -31,3 +31,7 @@ body {
 * {
   @apply scrollbar-hide;
 }
+
+html {
+  scroll-behavior: smooth;
+}

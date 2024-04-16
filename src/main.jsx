@@ -108,6 +108,16 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/doctor/profile",
+    element: (
+      <NavbarLayout isDoctor={true}>
+        <DoctorsDashboard>
+          <Profile isDoctor={true} />
+        </DoctorsDashboard>
+      </NavbarLayout>
+    ),
+  },
+  {
     path: "/doctor/register",
     element: (
       <NavbarLayout isDoctor={true}>

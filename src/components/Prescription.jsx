@@ -5,7 +5,7 @@ import AllergiesComponent from "./AllergiesComponent";
 import MedicinesComponent from "./MedicinesComponent";
 import SpecialConsiderationsComponent from "./SpecialConsiderationsComponent";
 
-const Prescription = ({ completeAppointment, prescriptionId }) => {
+const Prescription = ({ completeAppointment }) => {
   const [stage, setStage] = useState(0);
   const [step, setStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -82,19 +82,7 @@ const Prescription = ({ completeAppointment, prescriptionId }) => {
           <p>
             Signature: Dr. {doctor.firstName} {doctor.lastName}
           </p>
-          <a
-            href={ `/prescription/${prescriptionId}`
-            }
-            target="_blank"
-          >
-            <button
-              className={`btn btn-primary ${
-                prescriptionId !== undefined ? "" : ""
-              }`}
-            >
-              Print
-            </button>
-          </a>
+          
         </div>
       </div>
     </div>
@@ -127,10 +115,10 @@ const Prescription = ({ completeAppointment, prescriptionId }) => {
         )}
         {stage === 4 && (
           <div className="flex flex-col items-center justify-center gap-3">
-            <h1>complete prescription</h1>
+            <h1>complete prescription and generate prescription report</h1>
             <div className="p-">
               <button className="btn btn-primary" onClick={createPrescriptions}>
-                Create prescription
+                Generate report
               </button>
             </div>
           </div>

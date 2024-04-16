@@ -11,7 +11,6 @@ const fetchPatientDetails = async (userId) => {
     // Check if any documents exist in the snapshot
     if (userQuerySnapshot.docs.length > 0) {
       // Access the data of the first document and return it
-      console.log(userQuerySnapshot.docs[0].data());
       return userQuerySnapshot.docs[0].data();
     } else {
       // Return null if no documents are found
@@ -40,21 +39,11 @@ const RequestCard = ({ requestData, handleAccept, handleReject }) => {
     setIsAccordionOpen((prevState) => !prevState);
   };
 
-  const fallbackImage =
-    "https://cdn-icons-png.flaticon.com/512/9131/9131529.png"; // URL of the fallback image
-
   return (
-    <div className="card w-88 bg-base-100 shadow-xl p-5">
+    <div className="card bg-base-100 shadow-xl p-5">
       <div className="card-header flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <img
-            src={patientDetails?.imageUrl || fallbackImage} // Use fallback image if user image is not available
-            alt={patientDetails?.firstName}
-            className="w-12 h-12 rounded-full"
-          />
-          <h3>
-            {patientDetails?.firstName} {patientDetails?.lastName}
-          </h3>
+          <h3>{patientDetails ? `${patientDetails.firstName} ${patientDetails.lastName}` : "Loading..."}</h3>
         </div>
         <button
           className="btn btn-ghost"
@@ -76,7 +65,7 @@ const RequestCard = ({ requestData, handleAccept, handleReject }) => {
             <button className="btn btn-primary" onClick={handleAccept}>
               Accept
             </button>
-            <button className="btn btn-error text-white" onClick={handleReject}>
+            <button className="btn btn-error" onClick={handleReject}>
               Reject
             </button>
           </div>

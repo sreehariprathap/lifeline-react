@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import AppIcon from "./AppIcon";
 import { FiHome, FiPlusCircle } from "react-icons/fi";
 import { FaUserDoctor } from "react-icons/fa6";
-import { RiHistoryFill } from "react-icons/ri";
+import { RiHistoryFill,RiUser2Fill } from "react-icons/ri";
 
 const Sidebar = ({ isDoctor = false }) => {
   const location = useLocation();
@@ -52,17 +52,32 @@ const Sidebar = ({ isDoctor = false }) => {
           </AppIcon>
         </Link>
       )}
-      <Link to="/medical-history">
-        <AppIcon
-          styles={
-            isActive("/medical-history")
-              ? "text-primary-color"
-              : "hover:text-primary-color transition linear"
-          }
-        >
-          {<RiHistoryFill className="w-6 h-6" />}
-        </AppIcon>
-      </Link>
+      {!isDoctor && (
+        <Link to="/medical-history">
+          <AppIcon
+            styles={
+              isActive("/medical-history")
+                ? "text-primary-color"
+                : "hover:text-primary-color transition linear"
+            }
+          >
+            {<RiHistoryFill className="w-6 h-6" />}
+          </AppIcon>
+        </Link>
+      )}
+      {isDoctor && (
+        <Link to="/doctor/requests">
+          <AppIcon
+            styles={
+              isActive("/doctor/requests")
+                ? "text-primary-color"
+                : "hover:text-primary-color transition linear"
+            }
+          >
+            {<RiUser2Fill className="w-6 h-6" />}
+          </AppIcon>
+        </Link>
+      )}
     </div>
   );
 };

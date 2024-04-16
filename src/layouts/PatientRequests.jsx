@@ -7,13 +7,15 @@ import {
   deleteDoc,
   doc,
   updateDoc,
-  arrayUnion,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import RequestCard from "../components/RequestCard";
 import Loader from "../components/Loader";
+import toast from "react-hot-toast";
 
-const PatientRequests = ({ passedId = "GvHSNOkNFcdRA1qamdZbQmgyUN53" }) => {
+const PatientRequests = ({
+  passedId = JSON.parse(localStorage.getItem("doctor")).userId,
+}) => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,22 +53,17 @@ const PatientRequests = ({ passedId = "GvHSNOkNFcdRA1qamdZbQmgyUN53" }) => {
     fetchRequests();
   }, [passedId]);
 
-  const handleAccept = async (requestId, doctorId) => {
+  const handleAccept = async (requestId) => {
     try {
       // Update the request's status to accepted in the requests collection
       const requestDocRef = doc(db, "requests", requestId);
       await updateDoc(requestDocRef, { isAccepted: true });
 
-      // Update the user's document to add the doctor's ID to the 'doctors' array
-      const userRef = doc(db, "users", doctorId);
-      await updateDoc(userRef, {
-        doctors: arrayUnion(requestId),
-      });
-
       // Remove the accepted request from the local state
       setRequests((prevRequests) =>
         prevRequests.filter((req) => req.id !== requestId)
       );
+      toast.success("Patient request accepted");
     } catch (error) {
       console.error("Error accepting request:", error);
       // Handle error
@@ -89,8 +86,8 @@ const PatientRequests = ({ passedId = "GvHSNOkNFcdRA1qamdZbQmgyUN53" }) => {
   };
 
   return (
-    <div>
-      <h2>Requests for Doctor ID: {passedId}</h2>
+    <div className="bg-white shadow-lg p-5 py-10 rounded-md w-full">
+      <h2>Patient requests</h2>
       {loading && (
         <div className="w-full h-screen flex justify-center items-center p-92">
           <Loader />
@@ -107,6 +104,11 @@ const PatientRequests = ({ passedId = "GvHSNOkNFcdRA1qamdZbQmgyUN53" }) => {
           />
         ))}
       </ul>
+      {!requests.length && (
+        <div className="">
+          <h2 className="text-xl font-bold">No patint requests available</h2>
+        </div>
+      )}
     </div>
   );
 };

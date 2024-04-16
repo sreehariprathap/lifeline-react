@@ -15,7 +15,7 @@ const MedicalHistory = () => {
         const prescriptionsRef = collection(db, "prescriptions");
         const q = query(
           prescriptionsRef,
-          where("appointment.userId", "==", userId)
+          where("userId", "==", userId)
         );
         const querySnapshot = await getDocs(q);
 

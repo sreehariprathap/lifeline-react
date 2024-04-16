@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
@@ -127,18 +128,18 @@ const ViewPrescription = () => {
                 <Text style={styles.label}>Patient Info:</Text>
                 <View style={styles.info}>
                   <Text>
-                    Name: {prescription?.appointment?.user?.firstName}{" "}
-                    {prescription?.appointment?.user?.lastName}
+                    Name: {prescription?.user?.firstName}{" "}
+                    {prescription?.user?.lastName}
                   </Text>
-                  <Text>Email: {prescription?.appointment?.user?.email}</Text>
-                  {prescription?.appointment?.user?.phone && (
-                    <Text>Phone: {prescription?.appointment?.user?.phone}</Text>
+                  <Text>Email: {prescription?.user?.email}</Text>
+                  {prescription?.user?.phone && (
+                    <Text>Phone: {prescription?.user?.phone}</Text>
                   )}
                   <Text>
-                    Age: {calculateAge(prescription?.appointment?.user?.dob)}
+                    Age: {calculateAge(prescription?.user?.dob)}
                   </Text>
-                  <Text>Height: {prescription?.appointment?.user?.height}</Text>
-                  <Text>Weight: {prescription?.appointment?.user?.weight}</Text>
+                  <Text>Height: {prescription?.user?.height}</Text>
+                  <Text>Weight: {prescription?.user?.weight}</Text>
                 </View>
               </View>
 
@@ -147,22 +148,19 @@ const ViewPrescription = () => {
                 <Text style={styles.label}>Doctor's Info:</Text>
                 <View style={styles.info}>
                   <Text>
-                    Name: {prescription?.appointment?.doctor?.firstName}{" "}
-                    {prescription?.appointment?.doctor?.lastName}
+                    Name: {prescription?.doctor?.firstName}{" "}
+                    {prescription?.doctor?.lastName}
                   </Text>
                   <Text>
-                    Specialization:{" "}
-                    {prescription?.appointment?.doctor?.specialization}
+                    Specialization: {prescription?.doctor?.specialization}
                   </Text>
-                  <Text>Email: {prescription?.appointment?.doctor?.email}</Text>
+                  <Text>Email: {prescription?.doctor?.email}</Text>
                   <Text>
-                    Office Location:{" "}
-                    {prescription?.appointment?.doctor?.officeLocation}
+                    Office Location: {prescription?.doctor?.officeLocation}
                   </Text>
                 </View>
               </View>
             </View>
-
             {/* Diagnosis Section */}
             <View style={styles.section}>
               <Text style={[styles.label, styles.diagnosis]}>Diagnosis:</Text>
@@ -172,7 +170,7 @@ const ViewPrescription = () => {
                   Description: {prescription?.detailedDiagnosisReport}
                 </Text>
                 <Text>
-                  Special Precautions: {prescription?.specialPrecautions}
+                  Special Considerations: {prescription?.specialConsiderations}
                 </Text>
                 <Text>Allergies: {prescription?.allergies}</Text>
               </View>
@@ -200,13 +198,18 @@ const ViewPrescription = () => {
                   : 0}
               </Text>
             </View>
+
+            {/* Additional Info */}
+            <View style={styles.section}>
+              <Text>Additional Info: {prescription?.additionalInfo}</Text>
+            </View>
           </View>
 
           {/* Signature */}
           <View style={styles.signature}>
             <Text>
-              Signed by Dr. {prescription?.appointment?.doctor?.firstName}{" "}
-              {prescription?.appointment?.doctor?.lastName}
+              Signed by Dr. {prescription?.doctor?.firstName}{" "}
+              {prescription?.doctor?.lastName}
             </Text>
           </View>
         </Page>

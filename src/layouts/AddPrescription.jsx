@@ -47,30 +47,30 @@ const AddPrescription = () => {
 
         const appointmentData = appointmentSnapshot.data();
         const userId = appointmentData.userId;
-        const doctorId = "eoNQGeX4y3d4kYjbra7ot147IRA2";
+        // const doctorId = "eoNQGeX4y3d4kYjbra7ot147IRA2";
 
         const appointmentsRef = collection(db, "users");
         const q = query(appointmentsRef, where("userId", "==", userId));
         const querySnapshot = await getDocs(q);
 
-        const docRef = collection(db, "doctors");
-        const p = query(docRef, where("userId", "==", doctorId));
-        const docQuerySnapshot = await getDocs(p);
+        // const docRef = collection(db, "doctors");
+        // const p = query(docRef, where("userId", "==", doctorId));
+        // const docQuerySnapshot = await getDocs(p);
 
         const userData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        const doctorData = docQuerySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        // const doctorData = docQuerySnapshot.docs.map((doc) => ({
+        //   id: doc.id,
+        //   ...doc.data(),
+        // }));
 
         const appointmentWithUser = {
           ...appointmentData,
           user: userData[0],
-          doctor: doctorData[0],
+          doctor: JSON.parse(localStorage.getItem("doctor")),
         };
         console.log(JSON.stringify(appointmentWithUser));
         setAppointment(appointmentWithUser);
@@ -84,7 +84,8 @@ const AddPrescription = () => {
 
   const createPrescription = async (prescription) => {
     try {
-      const prescriptionData = { ...prescription, appointment };
+      const prescriptionData = { ...prescription, ...appointment };
+      console.log(prescriptionData);
       // Add appointment to Firestore prescriptions collection
       const prescriptionRef = await addDoc(
         collection(db, "prescriptions"),
@@ -171,11 +172,21 @@ const AddPrescription = () => {
             </div>
             <div className="divider"></div>
             <div>
-              <Prescription
-                completeAppointment={createPrescription}
-                prescriptionId={prescriptionId}
-              />
+              <Prescription completeAppointment={createPrescription} />
             </div>
+            {prescriptionId && (
+              <div>
+                <a href={`/prescription/${prescriptionId}`} target="_blank">
+                  <button
+                    className={`btn btn-primary ${
+                      prescriptionId !== undefined ? "" : ""
+                    }`}
+                  >
+                    Print
+                  </button>
+                </a>
+              </div>
+            )}
           </div>
         </div>
       ) : (

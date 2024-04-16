@@ -72,11 +72,16 @@ export const AuthContextProvider = ({ children }) => {
           );
           getDocs(doctorQuery)
             .then((querySnapshot) => {
+              if (querySnapshot.empty) { // Check if the query snapshot is empty
+                toast.error("Doctor data not found. Logging out.");
+                logOut(true); // Logout the user if doctor data is not found
+                return;
+              }
               querySnapshot.forEach((doc) => {
                 const doctorData = doc.data();
                 setDoctorData(doctorData);
-                navigate("/doctor/appointments");
               });
+              navigate("/doctor/appointments");
             })
             .catch((error) => {
               console.error("Error getting doctor's data:", error);
@@ -89,6 +94,7 @@ export const AuthContextProvider = ({ children }) => {
         });
     }
   };
+   
 
   const RegisterWithEmailAndPassword = (userData, isDoctor = false) => {
     const { email, password } = userData;
@@ -120,11 +126,14 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const logOut = async () => {
+  const logOut = async (isDoctor = false) => {
     const auth = getAuth(); // Get the auth instance
     try {
       await signOut(auth);
       setUser(null); // Set user to null after logout
+      isDoctor
+        ? localStorage.removeItem("doctor")
+        : localStorage.removeItem("user");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to log out");
