@@ -7,6 +7,7 @@ import {
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { UserAuth } from "../contexts/AuthContext";
@@ -82,6 +83,16 @@ const AddPrescription = () => {
     fetchAppointment();
   }, [id]);
 
+  const updateAppointmentIsCompleted = async (appointmentId) => {
+    try {
+      const appointmentRef = doc(db, "appointments", appointmentId);
+      await updateDoc(appointmentRef, { isCompleted: true });
+      console.log("Appointment is marked as completed.");
+    } catch (error) {
+      console.error("Error updating appointment:", error);
+    }
+  };
+
   const createPrescription = async (prescription) => {
     try {
       const prescriptionData = { ...prescription, ...appointment };
@@ -98,6 +109,7 @@ const AddPrescription = () => {
       // You can use the prescriptionId as needed
       console.log("Added prescription with ID:", prescriptionId);
       setPrescriptionId(prescriptionId);
+      updateAppointmentIsCompleted(appointment.id)
     } catch (error) {
       console.error("Error creating prescription:", error);
       // Handle error as needed
